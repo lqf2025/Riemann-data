@@ -55,9 +55,11 @@ plt.rcParams.update({
     "ytick.major.width": 0.85,
 })
 
+
 def hex2rgb(h):
     h = h.lstrip("#")
     return np.array([int(h[i:i+2], 16) for i in (0, 2, 4)]) / 255.0
+
 
 COLOR_THEO_BLUE = hex2rgb("#0072B2")
 COLOR_EXP_ORANGE = hex2rgb("#D55E00")
@@ -75,40 +77,51 @@ col_t = {
 
 rows_zeros = exp_05["rows_zeros"]
 
+# ---------- beta = 0.5 t-scan ----------
 abs_mean_exp_05 = exp_05["abs_mean"]
-var_abs_05 = exp_05["abs_var"]
+std_abs_05 = exp_05["abs_std"]
 abs_m_05 = abs_mean_exp_05.T.reshape(-1)
-lAbs_05 = np.sqrt(var_abs_05.T.reshape(-1))
+lAbs_05 = std_abs_05.T.reshape(-1)
 uAbs_05 = lAbs_05.copy()
+
 x_exp_05 = exp_05["t_flat"]
 x_th_05 = theo_05["t_flat"]
+
 X_t_05 = theo_05["curve_x_full"].T.reshape(-1)
 Y_t_05 = theo_05["curve_y_full"].T.reshape(-1)
 Abs_th_05 = np.sqrt(np.real(X_t_05)**2 + np.real(Y_t_05)**2)
+
 X_mean_s_05 = exp_05["x_mean"]
 Y_mean_s_05 = exp_05["y_mean"]
-std_X_05 = np.sqrt(exp_05["x_var"])
-std_Y_05 = np.sqrt(exp_05["y_var"])
+std_X_05 = exp_05["x_std"]
+std_Y_05 = exp_05["y_std"]
+
 X_theo_full_xy_05 = theo_05["xy_x_full"]
 Y_theo_full_xy_05 = theo_05["xy_y_full"]
 
+# ---------- beta = 0.3 t-scan ----------
 abs_mean_exp_03 = exp_03["abs_mean"]
-var_abs_03 = exp_03["abs_var"]
+std_abs_03 = exp_03["abs_std"]
 abs_m_03 = abs_mean_exp_03.T.reshape(-1)
-lAbs_03 = np.sqrt(var_abs_03.T.reshape(-1))
+lAbs_03 = std_abs_03.T.reshape(-1)
 uAbs_03 = lAbs_03.copy()
+
 x_exp_03 = exp_03["t_flat"]
 x_th_03 = theo_03["t_flat"]
+
 X_t_03 = theo_03["curve_x_full"].T.reshape(-1)
 Y_t_03 = theo_03["curve_y_full"].T.reshape(-1)
 Abs_th_03 = np.sqrt(np.real(X_t_03)**2 + np.real(Y_t_03)**2)
+
 X_mean_s_03 = exp_03["x_mean"]
 Y_mean_s_03 = exp_03["y_mean"]
-std_X_03 = np.sqrt(exp_03["x_var"])
-std_Y_03 = np.sqrt(exp_03["y_var"])
+std_X_03 = exp_03["x_std"]
+std_Y_03 = exp_03["y_std"]
+
 X_theo_full_xy_03 = theo_03["xy_x_full"]
 Y_theo_full_xy_03 = theo_03["xy_y_full"]
 
+# ---------- selected rows for d/e ----------
 X_data_03_exp = X_mean_s_03[rows_zeros, :]
 X_data_03_th = np.real(X_theo_full_xy_03[rows_zeros, 200:600+1])
 Y_data_03_exp = Y_mean_s_03[rows_zeros, :]
@@ -124,6 +137,7 @@ std_Y_03_sub = std_Y_03[rows_zeros, :]
 std_X_05_sub = std_X_05[rows_zeros, :]
 std_Y_05_sub = std_Y_05[rows_zeros, :]
 
+# ---------- beta scan ----------
 X_theo_beta = theo_beta["curve_x"]
 Y_theo_beta = theo_beta["curve_y"]
 abs_theo_beta = np.sqrt(X_theo_beta**2 + Y_theo_beta**2)
@@ -132,9 +146,9 @@ BETA_VALUES = exp_beta["beta"]
 X_mean_exp_beta = exp_beta["x_mean"]
 Y_mean_exp_beta = exp_beta["y_mean"]
 abs_mean_exp_beta = exp_beta["abs_mean"]
-err_X_beta = np.sqrt(exp_beta["x_var"])
-err_Y_beta = np.sqrt(exp_beta["y_var"])
-err_abs_beta = np.sqrt(exp_beta["abs_var"])
+err_X_beta = exp_beta["x_std"]
+err_Y_beta = exp_beta["y_std"]
+err_abs_beta = exp_beta["abs_std"]
 
 fig = plt.figure(figsize=(7, 3.2))
 fig.patch.set_facecolor("white")
@@ -159,6 +173,7 @@ ax_D_zeros = [fig.add_subplot(gs_D[0, k]) for k in range(3)]
 ax_E_zeros = [fig.add_subplot(gs_E[0, k], sharey=ax_D_zeros[0]) for k in range(3)]
 ax_F = fig.add_subplot(gs[1, 2])
 
+
 def add_panel_label(fig, ax, label, dx=0.028, dy=0.020):
     pos = ax.get_position()
     fig.text(
@@ -169,6 +184,7 @@ def add_panel_label(fig, ax, label, dx=0.028, dy=0.020):
         va="top"
     )
 
+
 for ax in [ax_A, ax_B, ax_C, ax_F] + ax_D_zeros + ax_E_zeros:
     ax.set_facecolor("white")
     ax.tick_params(labelsize=FONT_SIZE_TICK_LABEL)
@@ -176,7 +192,6 @@ for ax in [ax_A, ax_B, ax_C, ax_F] + ax_D_zeros + ax_E_zeros:
     ax.spines["right"].set_visible(False)
     ax.tick_params(top=False, right=False)
 
-# 不再强制 d/e/f 为正方形
 for ax in ax_D_zeros + ax_E_zeros + [ax_F]:
     ax.set_aspect("auto")
 
@@ -472,8 +487,8 @@ ax_F.text(
 add_panel_label(fig, ax_A, "a")
 add_panel_label(fig, ax_B, "b")
 add_panel_label(fig, ax_C, "c")
-add_panel_label(fig, ax_D_zeros[0], "d",dy=0.04)
-add_panel_label(fig, ax_E_zeros[0], "e",dy=0.04)
-add_panel_label(fig, ax_F, "f",dy=0.04)
+add_panel_label(fig, ax_D_zeros[0], "d", dy=0.04)
+add_panel_label(fig, ax_E_zeros[0], "e", dy=0.04)
+add_panel_label(fig, ax_F, "f", dy=0.04)
 
 plt.savefig("Fig3.pdf", bbox_inches="tight", pad_inches=0.003)
