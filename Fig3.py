@@ -136,13 +136,13 @@ err_X_beta = np.sqrt(exp_beta["x_var"])
 err_Y_beta = np.sqrt(exp_beta["y_var"])
 err_abs_beta = np.sqrt(exp_beta["abs_var"])
 
-fig = plt.figure(figsize=(7, 3.4))
+fig = plt.figure(figsize=(7, 3.2))
 fig.patch.set_facecolor("white")
 
 gs = fig.add_gridspec(
     2, 3,
     width_ratios=[1.5, 1.5, 0.82],
-    height_ratios=[1.58, 1.02],
+    height_ratios=[1.45, 1.02],
     left=0.060, right=0.995,
     bottom=0.108, top=0.988,
     wspace=0.18, hspace=0.25
