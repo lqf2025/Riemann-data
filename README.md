@@ -1,11 +1,11 @@
 # Figure Generation Repository
 
-This repository contains the code and data required to reproduce the following figures:
+This repository contains the code and data required to reproduce the figures in the following order:
 
-- **Fig. 3**
+- **Fig. 2**
 - **Fig. 4**
-- **Ex. Fig. 1**
-- **Ex. Fig. 2**
+- **Fig. 5**
+- **Supplementary_Figure_1**
 
 The generated PDF outputs are also included in the repository.
 
@@ -29,14 +29,14 @@ The generated PDF outputs are also included in the repository.
 │       ├── free_energy_axes_theory.npz
 │       ├── tscan_beta03_theory.npz
 │       └── tscan_beta05_theory.npz
-├── Fig3.py
-├── Fig3.pdf
+├── Fig2.py
+├── Fig2.pdf
 ├── Fig4.py
 ├── Fig4.pdf
-├── Ex_fig1.py
-├── Ex_fig1.pdf
-├── Ex_fig2.py
-├── Ex_fig2.pdf
+├── Fig5.py
+├── Fig5.pdf
+├── Supplementary_Figure_1.py
+├── Supplementary_Figure_1.pdf
 ├── GLA.py
 ├── GLA1.npz
 ├── GLA2.npz
@@ -48,20 +48,20 @@ The generated PDF outputs are also included in the repository.
 
 ## Overview
 
-This repository is organized to reproduce the main and extended figures listed above.
+This repository is organized to reproduce the figures listed above.
 
-- `Fig3.py` generates **Fig. 3**
-- `Fig4.py` generates **Fig. 4**
-- `Ex_fig1.py` generates **Ex. Fig. 1**
-- `Ex_fig2.py` generates **Ex. Fig. 2**
+- `Fig2.py` generates **Fig. 2**.
+- `Fig4.py` generates **Fig. 4**.
+- `Fig5.py` generates **Fig. 5**.
+- `Supplementary_Figure_1.py` generates **Supplementary_Figure_1**.
 
 The `data/` directory contains the numerical input files used by the plotting scripts:
 
-- `data.npz` and `data2.npz` are generated numerical datasets
-- `data/exp/` contains processed experimental datasets
-- `data/theory/` contains theoretical datasets used for comparison and plotting
+- `data/data.npz` and `data/data2.npz` are generated numerical datasets.
+- `data/exp/` contains processed experimental datasets.
+- `data/theory/` contains theoretical datasets used for comparison and plotting.
 
-In addition, `GLA.py` is used to generate the auxiliary files required by `Ex_fig1.py`:
+In addition, `GLA.py` is used to generate the auxiliary files required by `Fig2.py`:
 
 - `GLA1.npz`
 - `GLA2.npz`
@@ -85,18 +85,30 @@ A standard scientific Python environment is sufficient. The scripts mainly rely 
 
 ## How to reproduce the figures
 
-### Fig. 3
+### Fig. 2
 
-Run:
+This figure depends on the precomputed files:
+
+- `GLA1.npz`
+- `GLA2.npz`
+- `GLA3.npz`
+
+If these files are not present, generate them first by running:
 
 ```bash
-python Fig3.py
+python GLA.py
+```
+
+Then run:
+
+```bash
+python Fig2.py
 ```
 
 This generates:
 
 ```text
-Fig3.pdf
+Fig2.pdf
 ```
 
 ---
@@ -117,46 +129,34 @@ Fig4.pdf
 
 ---
 
-### Ex. Fig. 2
+### Fig. 5
 
 Run:
 
 ```bash
-python Ex_fig2.py
+python Fig5.py
 ```
 
 This generates:
 
 ```text
-Ex_fig2.pdf
+Fig5.pdf
 ```
 
 ---
 
-### Ex. Fig. 1
+### Supplementary_Figure_1
 
-This figure depends on the precomputed files:
-
-- `GLA1.npz`
-- `GLA2.npz`
-- `GLA3.npz`
-
-If these files are not present, generate them first by running:
+Run:
 
 ```bash
-python GLA.py
-```
-
-Then run:
-
-```bash
-python Ex_fig1.py
+python Supplementary_Figure_1.py
 ```
 
 This generates:
 
 ```text
-Ex_fig1.pdf
+Supplementary_Figure_1.pdf
 ```
 
 ---
@@ -218,21 +218,14 @@ To reproduce all figures from scratch:
    python data2.py
    cd ..
    ```
-4. Run the main plotting scripts:
-   ```bash
-   python Fig3.py
-   python Fig4.py
-   python Ex_fig2.py
-   ```
-5. For **Ex. Fig. 1**, first generate the GLA data if needed:
+4. Generate the auxiliary GLA data files for **Fig. 2**, if needed:
    ```bash
    python GLA.py
-   python Ex_fig1.py
    ```
-
----
-
-## Notes
-
-- The PDF files included in the repository are the generated figure outputs.
-- The repository already contains the required `.npz` files, so in most cases the figures can be reproduced directly without regenerating intermediate data.
+5. Run the plotting scripts in the figure order:
+   ```bash
+   python Fig2.py
+   python Fig4.py
+   python Fig5.py
+   python Supplementary_Figure_1.py
+   ```
